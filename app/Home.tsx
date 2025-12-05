@@ -1,10 +1,32 @@
 import React, { useState } from 'react';
-import { Modal, TextInput, Platform, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
+import { Alert, Modal, TextInput, Platform, View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 
 export default function Home() {
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState('');
   const [items, setItems] = useState<string[]>(["item 1", "item 2", "item 3", "item 4", "item 5"]);
+
+  const handleDeleteItem = (index: number) => {
+    Alert.alert(
+      "Confirmar exclusão",
+      "Tem certeza que deseja excluir este item?",
+      [
+        {
+          text: "Cancelar",
+          style: "cancel"
+        },
+        {
+          text: "Excluir",
+          style: "destructive",
+          onPress: () => {
+            const updatedItems = [...items];
+            updatedItems.splice(index, 1);
+            setItems(updatedItems);
+          }
+        }
+      ]
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -20,10 +42,14 @@ export default function Home() {
           data={items}
           keyExtractor={(_, idx) => String(idx)}
           contentContainerStyle={styles.listContainer}
-          renderItem={({ item }) => (
-            <View style={styles.listItem}>
+          renderItem={({ item, index }) => (
+            <TouchableOpacity
+              style={styles.listItem}
+              onLongPress={() => handleDeleteItem(index)}
+              accessibilityLabel={`Pressione e segure para excluir ${item}`}
+            >
               <Text style={styles.listItemText}>{item}</Text>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}
@@ -84,8 +110,18 @@ const styles = StyleSheet.create({
   emptySubtitle: { fontSize: 20, fontWeight: '700', marginBottom: 8 },
   emptyText: { fontSize: 16 },
   listContainer: { paddingBottom: 24 },
-  listItem: { padding: 12, borderRadius: 8, backgroundColor: '#fafafa', marginBottom: 8, borderWidth: 1, borderColor: '#eee' },
-  listItemText: { fontSize: 16 },
+  listItem: { 
+    padding: 12, 
+    borderRadius: 8, 
+    backgroundColor: '#fafafa', 
+    marginBottom: 8, 
+    borderWidth: 1, 
+    borderColor: '#eee',
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center'
+  },
+  listItemText: { fontSize: 16, flex: 1 },
   fab: {
     position: 'absolute',
     right: 30,
