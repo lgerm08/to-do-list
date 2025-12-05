@@ -43,16 +43,13 @@ export default function Home() {
           keyExtractor={(_, idx) => String(idx)}
           contentContainerStyle={styles.listContainer}
           renderItem={({ item, index }) => (
-            <View style={styles.listItem}>
+            <TouchableOpacity
+              style={styles.listItem}
+              onLongPress={() => handleDeleteItem(index)}
+              accessibilityLabel={`Pressione e segure para excluir ${item}`}
+            >
               <Text style={styles.listItemText}>{item}</Text>
-              <TouchableOpacity 
-                style={styles.deleteButton}
-                onPress={() => handleDeleteItem(index)}
-                accessibilityLabel={`Excluir ${item}`}
-              >
-                <Text style={styles.deleteButtonText}>×</Text>
-              </TouchableOpacity>
-            </View>
+            </TouchableOpacity>
           )}
         />
       )}
@@ -113,21 +110,18 @@ const styles = StyleSheet.create({
   emptySubtitle: { fontSize: 20, fontWeight: '700', marginBottom: 8 },
   emptyText: { fontSize: 16 },
   listContainer: { paddingBottom: 24 },
-  listItem: { padding: 12, borderRadius: 8, backgroundColor: '#fafafa', marginBottom: 8, borderWidth: 1, borderColor: '#eee', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  listItem: { 
+    padding: 12, 
+    borderRadius: 8, 
+    backgroundColor: '#fafafa', 
+    marginBottom: 8, 
+    borderWidth: 1, 
+    borderColor: '#eee',
+    flexDirection: 'row', 
+    justifyContent: 'space-between', 
+    alignItems: 'center'
+  },
   listItemText: { fontSize: 16, flex: 1 },
-  deleteButton: { 
-    width: 30, 
-    height: 30, 
-    borderRadius: 15, 
-    backgroundColor: '#ff4757', 
-    alignItems: 'center', 
-    justifyContent: 'center' 
-  },
-  deleteButtonText: { 
-    color: '#ffffff', 
-    fontSize: 20, 
-    fontWeight: 'bold' 
-  },
   fab: {
     position: 'absolute',
     right: 30,
